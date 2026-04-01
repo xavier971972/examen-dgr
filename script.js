@@ -136,7 +136,7 @@ function genererPDF() {
     // Options pour html2pdf
     const opt = {
         margin: 5,
-        filename: 'EVAL_DGR_Alyzia.pdf',
+        filename: 'CBTA.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { 
             scale: 2, 
