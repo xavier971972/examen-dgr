@@ -56,19 +56,13 @@ function genererPDF() {
     const nom = document.getElementById('nom-agent').value || "Agent";
     const prenom = document.getElementById('prenom-agent').value || "";
 
-    const opt = {
-        margin: [10, 10, 10, 10],
-        filename: `EVAL_DGR_${nom}_${prenom}.pdf`,
+const opt = {
+        margin: 10,
+        filename: `EVAL_DGR_${nom}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-            scale: 2, 
-            useCORS: true,
-            logging: false,
-            scrollY: 0 // Assure que la capture commence en haut de page
-        },
+        html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        // Paramètres de saut de page pour éviter les coupures nettes
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // Indispensable pour ne pas couper le doc
     };
 
     html2pdf().set(opt).from(element).save();
