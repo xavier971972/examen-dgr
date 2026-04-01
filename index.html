@@ -136,17 +136,39 @@
             </div>
         </section>
 
-        <footer class="doc-footer">
-            <div class="comment-area">
-                <label>Commentaire et Signature (Évaluateur / Stagiaire)</label>
-                <textarea id="commentaire"></textarea>
-            </div>
-            <div class="legal-notice">
-                <p>Propriété Groupe 3S. Art. L612-14 du CSI. </p>
-                <p>FOR-FO-373 V03 - 17/01/2025 </p>
-            </div>
-        </footer>
+<footer class="doc-footer">
+    <table class="signature-table">
+        <thead>
+            <tr>
+                <th colspan="2">Commentaire et Signature</th>
+            </tr>
+            <tr>
+                <th>Evaluateur</th>
+                <th>Stagiaire</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="sig-zone"><textarea id="com-eval"></textarea></td>
+                <td class="sig-zone"><textarea id="com-stagiaire"></textarea></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="legal-notice-box">
+        <div class="legal-text">
+            Le présent document est la propriété du Groupe 3S. Il ne peut être reproduit, communiqué, ou confié à des personnes externes, sans l'autorisation du service QSE.<br>
+            Les entités intervenant dans le domaine de la sécurité doivent répondre à l'article L612-14 du Code de la Sécurité Intérieure :<br>
+            L'autorisation d'exercice ne confère aucune prérogative de puissance publique à l'entreprise ou aux personnes qui en bénéficient.
+        </div>
+        <div class="legal-info">
+            FOR-FO-373 V03<br>
+            Date : 17/01/2025<br>
+            Page 1 sur 2
+        </div>
     </div>
+</footer>
+
 
     <div class="btn-area no-print">
         <button type="button" onclick="calculerScore()" class="btn valider">VALIDER SCORE</button>
