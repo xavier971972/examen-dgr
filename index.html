@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Évaluation Pratique DGR 7.5 - Groupe 3S</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+    <div id="document-to-print" class="container">
+        <header class="main-header">
+            <div class="logo-box">
+                <img src="G3S.png" alt="Logo Alyzia Groupe 3S">
+            </div>
+            <div class="title-box">
+                <h1>FORMULAIRE</h1>
+                <h2>DGR 7.5 Passage</h2>
+                <p>Évaluation pratique - Correction</p>
+            </div>
+        </header>
+
+        <div class="form-block">
+            <div class="block-header">Agent évalué.</div>
+            <div class="block-content grid-2">
+                <div class="input-group">
+                    <label>Nom</label>
+                    <input type="text" id="nom-agent" required>
+                </div>
+                <div class="input-group">
+                    <label>Prénom</label>
+                    <input type="text" id="prenom-agent" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-block">
+            <div class="block-header">Evaluateur.</div>
+            <div class="block-content grid-3">
+                <div class="input-group">
+                    <label>Nom</label>
+                    <input type="text" id="nom-eval">
+                </div>
+                <div class="input-group">
+                    <label>Prénom</label>
+                    <input type="text" id="prenom-eval">
+                </div>
+                <div class="input-group">
+                    <label>Fonction</label>
+                    <input type="text" id="fonction-eval">
+                </div>
+            </div>
+        </div>
+
+        <div class="result-container">
+            <div class="result-sidebar">Résultat de l'évaluation</div>
+            <div class="result-data">
+                <div class="res-row">
+                    <span>Date de l'évaluation :</span>
+                    <input type="date" id="date-eval">
+                </div>
+                <div class="res-row">
+                    <span>Evaluation faite à :</span>
+                    <input type="text" id="lieu-eval">
+                </div>
+                <div class="res-row">
+                    <span>Points obtenus :</span>
+                    <div class="score-display"><strong id="points-result">__</strong> / 100</div>
+                </div>
+                <div class="res-row">
+                    <span>% de réussite :</span>
+                    <div class="score-display"><strong id="percent-result">__</strong> %</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-block">
+            <div class="info-sidebar">Validation de l'évaluation:</div>
+            <div class="info-content" id="status-result">
+                En attente de calcul...
+            </div>
+        </div>
+
+        <div class="info-block">
+            <div class="info-sidebar">Condition de la validation:</div>
+            <div class="info-content small-text">
+                Note ≥ 80% : l'évaluation est validée [cite: 26]<br>
+                60% ≤ Note < 80% : devra refaire une évaluation [cite: 27]<br>
+                Note < 60% : devra refaire la formation théorique objet de cette évaluation [cite: 28]<br>
+                <strong>☆ Une mauvaise réponse amènera à un débriefing avec un supérieur hiérarchique</strong> [cite: 29]
+            </div>
+        </div>
+
+        <h3 class="q-title">QUESTIONNAIRE 1</h3>
+        
+        <section class="questions">
+            <div class="question-card">
+                <p>1. Où pouvez-vous trouver le tableau 2.3.A ?</p>
+                <label><input type="checkbox" name="q1" value="SITADOC"> SITADOC</label>
+                <label><input type="checkbox" name="q1" value="IATA"> Manuel IATA DGR</label>
+                <label><input type="checkbox" name="q1" value="REPLI"> En salle de repli</label>
+            </div>
+
+            <div class="question-card">
+                <p>2. Ce pictogramme sur le bagage d'un passager indique un danger, lequel ? [cite: 49]</p>
+                <img src="toxique.jpg" alt="Toxique" class="pictogram-img">
+                <label><input type="radio" name="q2"> Explosif [cite: 52]</label>
+                <label><input type="radio" name="q2"> Dangereux pour l'environnement [cite: 53]</label>
+                <label><input type="radio" name="q2"> Toxique [cite: 54]</label>
+                <label><input type="radio" name="q2"> Corrosif [cite: 56]</label>
+            </div>
+
+            <div class="question-card">
+                <p>3. Sélectionner la marchandise dangereuse interdite dans un bagage de soute : [cite: 57]</p>
+                <label><input type="radio" name="q3"> Une bouteille d'1L de vodka à 60° d'alcool [cite: 58]</label>
+                <label><input type="radio" name="q3"> Une cigarette électronique [cite: 59]</label>
+                <label><input type="radio" name="q3"> Un flacon de 300ml de parfum [cite: 60]</label>
+                <label><input type="radio" name="q3"> Un thermomètre médical au mercure [cite: 61]</label>
+            </div>
+
+            <div class="question-card">
+                <p>4. Lors de l'enregistrement d'un bagage, une odeur d'essence s'en dégage. Que faites-vous ? [cite: 65, 66]</p>
+                <label><input type="radio" name="q4"> Rien, c'est normal d'après le passager [cite: 67]</label>
+                <label><input type="radio" name="q4"> Je tamponne l'essence avec un mouchoir [cite: 68]</label>
+                <label><input type="radio" name="q4"> Je préviens un responsable + périmètre de sécurité de 25m [cite: 69]</label>
+                <label><input type="radio" name="q4"> Je demande de retirer le contenant [cite: 71]</label>
+            </div>
+
+            <div class="question-card">
+                <p>5. Quel article est accepté comme bagage de soute ? [cite: 72]</p>
+                <label><input type="radio" name="q5"> Un baril de lessive [cite: 77]</label>
+                <label><input type="radio" name="q5"> Un pot de colle néoprène liquide [cite: 78]</label>
+                <label><input type="radio" name="q5"> Une boîte sécurisée de cartouches de chasse (4.5Kg brut) [cite: 79]</label>
+                <label><input type="radio" name="q5"> Un extincteur [cite: 79]</label>
+            </div>
+        </section>
+
+        <footer class="doc-footer">
+            <div class="comment-area">
+                <label>Commentaire et Signature (Évaluateur / Stagiaire)</label>
+                <textarea id="commentaire"></textarea>
+            </div>
+            <div class="legal-notice">
+                <p>Propriété Groupe 3S. Art. L612-14 du CSI. [cite: 33, 34]</p>
+                <p>FOR-FO-373 V03 - 17/01/2025 [cite: 35]</p>
+            </div>
+        </footer>
+    </div>
+
+<div class="btn-area no-print">
+    <button type="button" onclick="calculerScore()" class="btn valider">VALIDER SCORE</button>
+    <button type="button" onclick="genererPDF()" class="btn pdf">ENREGISTRER PDF</button>
+    <button type="button" onclick="envoyerEmail()" class="btn envoyer">ENVOYER EMAIL</button>
+</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
