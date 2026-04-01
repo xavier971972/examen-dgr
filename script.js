@@ -1,15 +1,25 @@
+// Fonction pour afficher une alerte personnalisée sans mention "github.io"
+function showAlert(message) {
+    const modal = document.getElementById('custom-alert');
+    const msgElem = document.getElementById('alert-message');
+    if (modal && msgElem) {
+        msgElem.textContent = message;
+        modal.style.display = 'flex';
+    } else {
+        // Backup si la modale n'est pas encore dans le HTML
+        alert(message);
+    }
+}
+
 function calculerScore() {
-    // 1. VÉRIFICATION DE L'ÉVALUATEUR
-    // On récupère l'élément du nom de l'évaluateur
+    // 1. VÉRIFICATION DE L'ÉVALUATEUR [cite: 130]
     const inputEval = document.getElementById('nom-eval');
-    
     if (!inputEval || inputEval.value.trim() === "") {
-        alert("Action bloquée : Le Nom de l'évaluateur doit être renseigné.");
+        showAlert("Action bloquée : Le Nom de l'évaluateur doit être renseigné.");
         return; 
     }
 
-    // 2. VÉRIFICATION DES RÉPONSES
-    // On vérifie que pour chaque question (q1 à q5), une option est cochée
+    // 2. VÉRIFICATION DES RÉPONSES (q1 à q5) [cite: 41]
     const questions = ['q1', 'q2', 'q3', 'q4', 'q5'];
     let toutesRepondues = true;
 
@@ -19,7 +29,7 @@ function calculerScore() {
     });
 
     if (!toutesRepondues) {
-        alert("Action bloquée : Vous devez répondre à toutes les questions avant de valider.");
+        showAlert("Action bloquée : Vous devez répondre à toutes les questions avant de valider.");
         return;
     }
 
@@ -46,7 +56,7 @@ function calculerScore() {
     const q1_REPLI = document.querySelector('input[name="q1"][value="REPLI"]');
     const resQ1 = document.getElementById('res-q1');
 
-    // On montre les bonnes réponses en vert [cite: 58]
+    // On montre les bonnes réponses en vert [cite: 150, 151]
     q1_SITADOC.parentElement.style.backgroundColor = "#d4edda";
     q1_IATA.parentElement.style.backgroundColor = "#d4edda";
 
@@ -84,7 +94,7 @@ function calculerScore() {
             }
         });
 
-        // Colorer l'erreur en rouge si besoin
+        // Colorer l'erreur en rouge si le choix utilisateur est incorrect
         if (userChoice.parentElement.textContent.trim().includes(solutions[qName])) {
             score += 20;
             isCorrect = true;
@@ -106,21 +116,18 @@ function calculerScore() {
 
     const status = document.getElementById('status-result');
     if (pct >= 80) {
-        status.innerHTML = "<strong>✅ L'évaluation a été validée.</strong>"; // [cite: 26]
+        status.innerHTML = "<strong>✅ L'évaluation a été validée.</strong>"; // [cite: 144]
         status.style.color = "green";
     } else {
-        status.innerHTML = "<strong>❌ L'évaluation n'a pas été validée.</strong>"; // [cite: 25]
+        status.innerHTML = "<strong>❌ L'évaluation n'a pas été validée.</strong>"; // 
         status.style.color = "red";
     }
 }
 
-// Gardez vos fonctions genererPDF() et envoyerEmail() à la suite...
-
-
 function genererPDF() {
     const element = document.getElementById('document-to-print');
     
-    // Synchronisation forcée des données pour le rendu PDF
+    // Synchro des champs (indispensable)
     const inputs = element.querySelectorAll('input, textarea');
     inputs.forEach(input => {
         if (input.type === 'checkbox' || input.type === 'radio') {
@@ -133,18 +140,26 @@ function genererPDF() {
     });
 
     const nom = document.getElementById('nom-agent').value || "Agent";
-    const prenom = document.getElementById('prenom-agent').value || "";
 
 const opt = {
         margin: 10,
         filename: `EVAL_DGR_${nom}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // Indispensable pour ne pas couper le doc
+        html2canvas: { 
+            scale: 2, 
+            useCORS: true, 
+            allowTaint: true,
+            width: 800, // On force une largeur de capture fixe pour éviter l'étirement
+            windowWidth: 800
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
-    html2pdf().set(opt).from(element).save();
+    // Exécution avec gestion d'erreur
+    html2pdf().set(opt).from(element).save().catch(err => {
+        console.error("Erreur PDF finale:", err);
+        showAlert("Problème de sécurité image : Essayez de rafraîchir la page ou d'utiliser Chrome.");
+    });
 }
 
 function envoyerEmail() {

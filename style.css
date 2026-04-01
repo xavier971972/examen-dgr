@@ -36,7 +36,13 @@ body { font-family: Arial, sans-serif; background: #ccc; padding: 20px; }
 .q-title { border-bottom: 2px solid var(--bordeaux); color: var(--bordeaux); margin: 20px 0 10px 0; }
 
 .question-card { background: #f9f9f9; padding: 12px; margin-bottom: 10px; border-left: 4px solid var(--bordeaux); border-bottom: 1px solid #eee; }
-.pictogram-img { display: block; width: 65px; margin: 8px 0; border: 1px solid #ccc; }
+.pictogram-img {
+    display: block;
+    width: 60px !important; /* Force la largeur à 60 pixels */
+    height: auto !important; /* Garde les proportions */
+    margin: 10px 0;
+    border: 1px solid #ccc;
+}
 .question-card label { display: block; margin: 5px 0; cursor: pointer; font-size: 0.9rem; }
 
 .btn-area { text-align: center; padding: 20px; background: #eee; position: sticky; bottom: 0; border-top: 2px solid #999; }
