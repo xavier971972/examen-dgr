@@ -96,14 +96,14 @@
         
         <section class="questions">
             <div class="question-card">
-                <p>1. Où pouvez-vous trouver le tableau 2.3.A ?</p>
+                <p>1. Où pouvez-vous trouver le tableau 2.3.A ? <span id="res-q1" style="float:right; font-weight:bold;"></span></p>
                 <label><input type="checkbox" name="q1" value="SITADOC"> SITADOC</label>
                 <label><input type="checkbox" name="q1" value="IATA"> Manuel IATA DGR</label>
                 <label><input type="checkbox" name="q1" value="REPLI"> En salle de repli</label>
             </div>
 
             <div class="question-card">
-                <p>2. Ce pictogramme sur le bagage d'un passager indique un danger, lequel ? </p>
+                <p>2. Ce pictogramme sur le bagage d'un passager indique un danger, lequel ? <span id="res-q2" style="float:right; font-weight:bold;"></span></p>
                 <img src="toxique.jpg" alt="Toxique" class="pictogram-img">
                 <label><input type="radio" name="q2"> Explosif </label>
                 <label><input type="radio" name="q2"> Dangereux pour l'environnement </label>
@@ -112,7 +112,7 @@
             </div>
 
             <div class="question-card">
-                <p>3. Sélectionner la marchandise dangereuse interdite dans un bagage de soute : </p>
+                <p>3. Sélectionner la marchandise dangereuse interdite dans un bagage de soute : <span id="res-q3" style="float:right; font-weight:bold;"></span></p>
                 <label><input type="radio" name="q3"> Une bouteille d'1L de vodka à 60° d'alcool </label>
                 <label><input type="radio" name="q3"> Une cigarette électronique </label>
                 <label><input type="radio" name="q3"> Un flacon de 300ml de parfum </label>
@@ -120,7 +120,7 @@
             </div>
 
             <div class="question-card">
-                <p>4. Lors de l'enregistrement d'un bagage, une odeur d'essence s'en dégage. Que faites-vous ? </p>
+                <p>4. Lors de l'enregistrement d'un bagage, une odeur d'essence s'en dégage. Que faites-vous ? <span id="res-q4" style="float:right; font-weight:bold;"></span></p>
                 <label><input type="radio" name="q4"> Rien, c'est normal d'après le passager </label>
                 <label><input type="radio" name="q4"> Je tamponne l'essence avec un mouchoir </label>
                 <label><input type="radio" name="q4"> Je préviens un responsable + périmètre de sécurité de 25m </label>
@@ -128,7 +128,7 @@
             </div>
 
             <div class="question-card">
-                <p>5. Quel article est accepté comme bagage de soute ? </p>
+                <p>5. Quel article est accepté comme bagage de soute ? <span id="res-q5" style="float:right; font-weight:bold;"></span></p>
                 <label><input type="radio" name="q5"> Un baril de lessive </label>
                 <label><input type="radio" name="q5"> Un pot de colle néoprène liquide </label>
                 <label><input type="radio" name="q5"> Une boîte sécurisée de cartouches de chasse (4.5Kg brut) </label>
@@ -148,11 +148,11 @@
         </footer>
     </div>
 
-<div class="btn-area no-print">
-    <button type="button" onclick="calculerScore()" class="btn valider">VALIDER SCORE</button>
-    <button type="button" onclick="genererPDF()" class="btn pdf">ENREGISTRER PDF</button>
-    <button type="button" onclick="envoyerEmail()" class="btn envoyer">ENVOYER EMAIL</button>
-</div>
+    <div class="btn-area no-print">
+        <button type="button" onclick="calculerScore()" class="btn valider">VALIDER SCORE</button>
+        <button type="button" onclick="genererPDF()" class="btn pdf">ENREGISTRER PDF</button>
+        <button type="button" onclick="envoyerEmail()" class="btn envoyer">ENVOYER EMAIL</button>
+    </div>
 
     <script src="script.js"></script>
 </body>

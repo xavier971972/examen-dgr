@@ -1,15 +1,67 @@
 function calculerScore() {
-    let score = 0;
-
-    // Q1: SITADOC ou IATA = 20pts. Si REPLI coché = 0pt.
-    const q1_SITADOC = document.querySelector('input[name="q1"][value="SITADOC"]').checked;
-    const q1_IATA = document.querySelector('input[name="q1"][value="IATA"]').checked;
-    const q1_REPLI = document.querySelector('input[name="q1"][value="REPLI"]').checked;
-
-    if (!q1_REPLI && (q1_SITADOC || q1_IATA)) {
-        score += 20;
+    // 1. VÉRIFICATION DE L'ÉVALUATEUR
+    // On récupère l'élément du nom de l'évaluateur
+    const inputEval = document.getElementById('nom-eval');
+    
+    if (!inputEval || inputEval.value.trim() === "") {
+        alert("Action bloquée : Le Nom de l'évaluateur doit être renseigné.");
+        return; 
     }
 
+    // 2. VÉRIFICATION DES RÉPONSES
+    // On vérifie que pour chaque question (q1 à q5), une option est cochée
+    const questions = ['q1', 'q2', 'q3', 'q4', 'q5'];
+    let toutesRepondues = true;
+
+    questions.forEach(q => {
+        const res = document.querySelector(`input[name="${q}"]:checked`);
+        if (!res) { toutesRepondues = false; }
+    });
+
+    if (!toutesRepondues) {
+        alert("Action bloquée : Vous devez répondre à toutes les questions avant de valider.");
+        return;
+    }
+
+    // --- SI TOUT EST OK, CALCUL DU SCORE ---
+    let score = 0;
+    
+    // Nettoyage des styles précédents
+    const labels = document.querySelectorAll('.question-card label');
+    labels.forEach(label => {
+        label.style.backgroundColor = "transparent";
+        label.style.color = "black";
+        label.style.fontWeight = "normal";
+    });
+
+    // Nettoyage des points affichés (+20 / +0)
+    for (let i = 1; i <= 5; i++) {
+        const span = document.getElementById(`res-q${i}`);
+        if (span) span.textContent = "";
+    }
+
+    // --- LOGIQUE QUESTION 1 ---
+    const q1_SITADOC = document.querySelector('input[name="q1"][value="SITADOC"]');
+    const q1_IATA = document.querySelector('input[name="q1"][value="IATA"]');
+    const q1_REPLI = document.querySelector('input[name="q1"][value="REPLI"]');
+    const resQ1 = document.getElementById('res-q1');
+
+    // On montre les bonnes réponses en vert [cite: 58]
+    q1_SITADOC.parentElement.style.backgroundColor = "#d4edda";
+    q1_IATA.parentElement.style.backgroundColor = "#d4edda";
+
+    if (!q1_REPLI.checked && (q1_SITADOC.checked || q1_IATA.checked)) {
+        score += 20;
+        if (resQ1) { resQ1.textContent = "+20 pts"; resQ1.style.color = "green"; }
+    } else {
+        if (resQ1) { resQ1.textContent = "+0 pt"; resQ1.style.color = "red"; }
+        if (q1_REPLI.checked) {
+            q1_REPLI.parentElement.style.backgroundColor = "#f8d7da";
+            q1_REPLI.parentElement.style.color = "#721c24";
+        }
+    }
+
+    // --- LOGIQUE QUESTIONS 2 À 5 ---
     const solutions = {
         q2: "Toxique",
         q3: "Une cigarette électronique",
@@ -18,25 +70,52 @@ function calculerScore() {
     };
 
     for (let i = 2; i <= 5; i++) {
-        const check = document.querySelector(`input[name="q${i}"]:checked`);
-        if (check && check.parentElement.textContent.trim().includes(solutions[`q${i}`])) {
+        const qName = `q${i}`;
+        const radios = document.querySelectorAll(`input[name="${qName}"]`);
+        const userChoice = document.querySelector(`input[name="${qName}"]:checked`);
+        const resSpan = document.getElementById(`res-q${i}`);
+        let isCorrect = false;
+
+        // Colorer la bonne réponse en vert [cite: 58]
+        radios.forEach(r => {
+            if (r.parentElement.textContent.trim().includes(solutions[qName])) {
+                r.parentElement.style.backgroundColor = "#d4edda";
+                r.parentElement.style.fontWeight = "bold";
+            }
+        });
+
+        // Colorer l'erreur en rouge si besoin
+        if (userChoice.parentElement.textContent.trim().includes(solutions[qName])) {
             score += 20;
+            isCorrect = true;
+        } else {
+            userChoice.parentElement.style.backgroundColor = "#f8d7da";
+            userChoice.parentElement.style.color = "#721c24";
+        }
+
+        if (resSpan) {
+            resSpan.textContent = isCorrect ? "+20 pts" : "+0 pt";
+            resSpan.style.color = isCorrect ? "green" : "red";
         }
     }
 
+    // --- AFFICHAGE TOTAL ---
     const pct = (score / 100) * 100;
     document.getElementById('points-result').textContent = score;
     document.getElementById('percent-result').textContent = pct;
 
     const status = document.getElementById('status-result');
     if (pct >= 80) {
-        status.innerHTML = "<strong>✅ L'évaluation a été validée.</strong>";
+        status.innerHTML = "<strong>✅ L'évaluation a été validée.</strong>"; // [cite: 26]
         status.style.color = "green";
     } else {
-        status.innerHTML = "<strong>❌ L'évaluation n'a pas été validée.</strong>";
+        status.innerHTML = "<strong>❌ L'évaluation n'a pas été validée.</strong>"; // [cite: 25]
         status.style.color = "red";
     }
 }
+
+// Gardez vos fonctions genererPDF() et envoyerEmail() à la suite...
+
 
 function genererPDF() {
     const element = document.getElementById('document-to-print');

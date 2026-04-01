@@ -51,3 +51,9 @@ body { font-family: Arial, sans-serif; background: #ccc; padding: 20px; }
 .legal-notice { text-align: center; font-size: 0.65rem; color: #777; margin-top: 10px; }
 
 @media print { .no-print { display: none !important; } }
+
+.point-detail {
+    float: right;
+    font-weight: bold;
+    font-size: 0.9em;
+}
