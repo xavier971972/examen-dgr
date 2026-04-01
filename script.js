@@ -12,17 +12,23 @@ function showAlert(message) {
 }
 
 function calculerScore() {
-    // 1. VÉRIFICATION DE L'ÉVALUATEUR [cite: 130]
+    // 1. VÉRIFICATION DE LA DATE (Nouveau blocage)
+    const inputDate = document.getElementById('date-eval');
+    if (!inputDate || inputDate.value === "") {
+        showAlert("Action bloquée : La Date de l'évaluation doit être renseignée.");
+        return; 
+    }
+
+    // 2. VÉRIFICATION DE L'ÉVALUATEUR
     const inputEval = document.getElementById('nom-eval');
     if (!inputEval || inputEval.value.trim() === "") {
         showAlert("Action bloquée : Le Nom de l'évaluateur doit être renseigné.");
         return; 
     }
 
-    // 2. VÉRIFICATION DES RÉPONSES (q1 à q5) [cite: 41]
+    // 3. VÉRIFICATION DES RÉPONSES (q1 à q5)
     const questions = ['q1', 'q2', 'q3', 'q4', 'q5'];
     let toutesRepondues = true;
-
     questions.forEach(q => {
         const res = document.querySelector(`input[name="${q}"]:checked`);
         if (!res) { toutesRepondues = false; }
@@ -127,33 +133,20 @@ function calculerScore() {
 function genererPDF() {
     const element = document.getElementById('document-to-print');
     
-    // Synchro des champs (indispensable)
-    const inputs = element.querySelectorAll('input, textarea');
-    inputs.forEach(input => {
-        if (input.type === 'checkbox' || input.type === 'radio') {
-            if (input.checked) input.setAttribute('checked', 'checked');
-            else input.removeAttribute('checked');
-        } else {
-            input.setAttribute('value', input.value);
-            if (input.tagName === 'TEXTAREA') input.innerHTML = input.value;
-        }
-    });
-
-    const nom = document.getElementById('nom-agent').value || "Agent";
-
-const opt = {
-        margin: 10,
-        filename: `EVAL_DGR_${nom}.pdf`,
+    // Options pour html2pdf
+    const opt = {
+        margin: 5,
+        filename: 'EVAL_DGR_Alyzia.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { 
             scale: 2, 
-            useCORS: true, 
-            allowTaint: true,
-            width: 800, // On force une largeur de capture fixe pour éviter l'étirement
-            windowWidth: 800
+            useCORS: true,
+            // On s'assure que les éléments no-print sont bien ignorés
+            ignoreElements: (el) => el.classList.contains('no-print')
         },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
+
 
     // Exécution avec gestion d'erreur
     html2pdf().set(opt).from(element).save().catch(err => {

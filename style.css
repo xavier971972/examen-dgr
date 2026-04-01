@@ -122,3 +122,59 @@ body { font-family: Arial, sans-serif; background: #ccc; padding: 20px; }
     flex-direction: column;
     justify-content: center;
 }
+
+/* Suppression des boutons à l'impression/PDF */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}
+
+/* Style Signature */
+.signature-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    border: 2px solid #000; /* Bordure extérieure forte */
+}
+
+.main-title-sig {
+    background-color: #7a1212;
+    color: white;
+    border: 1px solid #000;
+    padding: 5px;
+    font-size: 1.1rem;
+}
+
+.sub-title-sig {
+    background-color: #7a1212;
+    color: white;
+    border: 1px solid #000;
+    padding: 5px;
+    width: 50%;
+}
+
+.sig-zone {
+    border: 1px solid #000;
+    height: 120px; /* Hauteur fixe pour la signature */
+    vertical-align: top;
+    padding: 0;
+}
+
+.sig-content {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    font-family: Courier, monospace; /* Style machine à écrire pour le texte saisi */
+    font-size: 1rem;
+    outline: none;
+    overflow-wrap: break-word;
+}
+
+/* Bordures Mentions Légales */
+.legal-notice-box {
+    display: flex;
+    border: 2px solid #000;
+    margin-top: 15px;
+}
