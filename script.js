@@ -129,6 +129,7 @@ function calculerScore() {
         status.style.color = "red";
     }
 }
+
 function genererPDF() {
     const element = document.getElementById('document-to-print');
     

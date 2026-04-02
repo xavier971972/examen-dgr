@@ -178,3 +178,30 @@ body { font-family: Arial, sans-serif; background: #ccc; padding: 20px; }
     border: 2px solid #000;
     margin-top: 15px;
 }
+
+@media print {
+    /* On réduit la taille globale pour le PDF */
+    body {
+        font-size: 11px; 
+    }
+    .container {
+        width: 100%;
+        margin: 0;
+        padding: 5px;
+        border: none; /* On peut enlever la bordure extérieure pour gagner de la place */
+    }
+    .question-card {
+        margin-bottom: 5px;
+        padding: 8px;
+    }
+    .main-header {
+        margin-bottom: 10px;
+    }
+    .signature-table {
+        margin-top: 5px;
+    }
+    /* On force les images à ne pas être trop grandes */
+    .pictogram-img {
+        width: 45px !important;
+    }
+}
