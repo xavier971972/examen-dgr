@@ -132,8 +132,12 @@ function calculerScore() {
 
 function genererPDF() {
     const element = document.getElementById('document-to-print');
+    const btnArea = document.querySelector('.btn-area');
     
-    // Synchronisation des champs
+    // 1. Masquer les boutons AVANT la capture 
+    if (btnArea) btnArea.style.display = 'none';
+
+    // 2. Synchronisation des champs (Inputs -> PDF)
     const inputs = element.querySelectorAll('input, textarea');
     inputs.forEach(input => {
         if (input.type === 'checkbox' || input.type === 'radio') {
@@ -146,20 +150,28 @@ function genererPDF() {
 
     const nom = document.getElementById('nom-agent').value || "Agent";
 
+    // 3. Options de génération 
     const opt = {
         margin: 5,
         filename: `EVAL_DGR_${nom}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { 
-            scale: 2, // Garde une bonne qualité
+            scale: 2,
             useCORS: true,
-            letterRendering: true
+            letterRendering: true,
+            scrollY: 0
         },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: 'avoid-all' } 
     };
 
-    // On lance la génération simple
-    html2pdf().set(opt).from(element).save();
+    // 4. Générer et réafficher les boutons après
+    html2pdf().set(opt).from(element).save().then(() => {
+        if (btnArea) btnArea.style.display = 'block'; // Réapparaissent après l'enregistrement
+    }).catch(err => {
+        if (btnArea) btnArea.style.display = 'block';
+        console.error("Erreur PDF:", err);
+    });
 }
 
 function envoyerEmail() {
