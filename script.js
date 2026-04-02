@@ -130,17 +130,45 @@ function calculerScore() {
     }
 }
 
-const opt = {
-    margin: 5,
-    filename: `EVAL_DGR_${nom}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { 
-        scale: 1, // 🔥 important (ni trop petit ni trop grand)
-        useCORS: true,
-        scrollY: 0
-    },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-};
+function genererPDF() {
+    const element = document.getElementById('document-to-print');
+    const btnArea = document.querySelector('.btn-area');
+
+    // Masquer boutons
+    if (btnArea) btnArea.style.display = 'none';
+
+    // Synchronisation inputs
+    const inputs = element.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+        if (input.type === 'checkbox' || input.type === 'radio') {
+            if (input.checked) input.setAttribute('checked', 'checked');
+            else input.removeAttribute('checked');
+        } else {
+            input.setAttribute('value', input.value);
+        }
+    });
+
+    const nom = document.getElementById('nom-agent').value || "Agent";
+
+    const opt = {
+        margin: 5,
+        filename: `EVAL_DGR_${nom}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+            scale: 1,
+            useCORS: true,
+            scrollY: 0
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save().then(() => {
+        if (btnArea) btnArea.style.display = 'block';
+    }).catch(err => {
+        if (btnArea) btnArea.style.display = 'block';
+        console.error("Erreur PDF:", err);
+    });
+}
 
 function envoyerEmail() {
     const nom = document.getElementById('nom-agent').value;
