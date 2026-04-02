@@ -397,3 +397,23 @@ input[type="date"] {
         -webkit-print-color-adjust: exact;
     }
 }
+@media print {
+    /* Force le conteneur à une largeur fixe pour le rendu PDF */
+    .container {
+        width: 750px !important; 
+        min-width: 750px !important;
+        margin: 0 !important;
+        padding: 5mm !important;
+    }
+    
+    /* Réduit la police globale si nécessaire pour tout faire tenir */
+    body {
+        font-size: 12px !important;
+    }
+
+    /* Empêche les coupures de mots bizarres */
+    * {
+        overflow: visible !important;
+        word-break: normal !important;
+    }
+}
