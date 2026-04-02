@@ -1,18 +1,49 @@
-:root { --bordeaux: #7a1212; }
+:root { --orange: #EF7D00; }
 
 body { font-family: Arial, sans-serif; background: #ccc; padding: 20px; }
 .container { max-width: 850px; margin: auto; background: white; padding: 15px; border: 1px solid #000; }
 
-.main-header { display: flex; border: 1px solid #000; margin-bottom: 15px; }
-.logo-box { width: 35%; border-right: 1px solid #000; padding: 10px; display: flex; align-items: center; justify-content: center; }
-.logo-box img { max-width: 100%; height: auto; }
-.title-box { width: 65%; text-align: center; }
-.title-box h1 { margin: 0; font-size: 1.4rem; color: var(--bordeaux); border-bottom: 1px solid #000; padding: 5px; }
-.title-box h2 { margin: 5px 0 0 0; font-size: 1.1rem; }
-.title-box p { margin: 0; padding-bottom: 5px; font-weight: bold; color: var(--bordeaux); }
+.main-header {
+    display: flex;
+    border: 1px solid #000;
+    margin-bottom: 5px !important; /* Réduit l'espace sous l'en-tête [cite: 139] */
+}
+
+.logo-box {
+    width: 35%;
+    border-right: 1px solid #000;
+    padding: 5px !important; /* Réduit de 10px à 5px [cite: 67] */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-box img {
+    max-height: 50px; /* Limite la hauteur du logo Alyzia  */
+    width: auto;
+}
+
+.title-box {
+    width: 65%;
+    text-align: center;
+}
+
+.title-box h1 {
+    margin: 0;
+    font-size: 1.1rem !important; /* Réduit la taille de "FORMULAIRE" [cite: 66, 177] */
+    color: var(--orange);
+    border-bottom: 1px solid #000;
+    padding: 2px !important;
+}
+
+.title-box h2 {
+    margin: 2px 0 !important;
+    font-size: 0.9rem !important; /* Réduit la taille du titre de l'évaluation [cite: 4, 69, 180] */
+}
+.title-box p { margin: 0; padding-bottom: 5px; font-weight: bold; color: var(--orange); }
 
 .form-block { margin-bottom: 10px; border: 1px solid #000; }
-.block-header { background: var(--bordeaux); color: white; text-align: center; padding: 4px; font-weight: bold; font-size: 0.9rem; }
+.block-header { background: var(--orange); color: white; text-align: center; padding: 4px; font-weight: bold; font-size: 0.9rem; }
 .block-content { display: grid; }
 .grid-2 { grid-template-columns: 1fr 1fr; }
 .grid-3 { grid-template-columns: 1fr 1fr 1.2fr; }
@@ -23,19 +54,55 @@ body { font-family: Arial, sans-serif; background: #ccc; padding: 20px; }
 .input-group input { width: 100%; border: none; padding: 8px; box-sizing: border-box; text-align: center; font-size: 0.9rem; }
 
 .result-container, .info-block { display: flex; border: 1px solid #000; margin-bottom: 8px; }
-.result-sidebar, .info-sidebar { background: var(--bordeaux); color: white; width: 28%; display: flex; align-items: center; justify-content: center; text-align: center; padding: 5px; font-weight: bold; font-size: 0.9rem; border-right: 1px solid #000; }
+.result-sidebar, .info-sidebar { background: var(--orange); color: white; width: 28%; display: flex; align-items: center; justify-content: center; text-align: center; padding: 5px; font-weight: bold; font-size: 0.9rem; border-right: 1px solid #000; }
 .result-data, .info-content { width: 72%; padding: 0; }
 
 .res-row { display: flex; border-bottom: 1px solid #000; }
 .res-row:last-child { border-bottom: none; }
-.res-row span { width: 45%; padding: 5px; border-right: 1px solid #000; font-size: 0.85rem; font-weight: bold; }
+/* Centrage des libellés et des saisies dans la zone résultat */
+.res-row span {
+    width: 45%;
+    padding: 5px;
+    border-right: 1px solid #000;
+    font-size: 0.85rem;
+    font-weight: bold;
+    display: flex;             /* Permet le centrage vertical */
+    align-items: center;       /* Centre verticalement */
+    justify-content: center;   /* Centre horizontalement */
+    text-align: center;
+}
 .res-row input { width: 55%; border: none; padding: 4px; font-size: 0.9rem; }
 .score-display { width: 55%; text-align: center; padding: 5px; font-size: 0.95rem; }
 
 .info-content { padding: 8px; font-size: 0.85rem; line-height: 1.3; }
-.q-title { border-bottom: 2px solid var(--bordeaux); color: var(--bordeaux); margin: 20px 0 10px 0; }
+.q-title { border-bottom: 2px solid var(--orange); color: var(--orange); margin: 20px 0 10px 0; }
 
-.question-card { background: #f9f9f9; padding: 12px; margin-bottom: 10px; border-left: 4px solid var(--bordeaux); border-bottom: 1px solid #eee; }
+/* Encadrement des questions */
+/* Soulignement orange des questions au lieu de l'encadrement */
+/* On retire la bordure du bloc global */
+.question-card {
+    background: transparent;
+    padding: 5px 0;
+    margin-bottom: 20px;
+    border: none !important;
+    page-break-inside: avoid;
+}
+
+/* On applique le soulignement orange uniquement sous l'énoncé de la question */
+.question-card p {
+    display: inline-block; /* Permet au trait de s'arrêter à la fin du texte */
+    width: 100%;           /* Ou gardez 100% pour un trait qui traverse toute la page */
+    border-bottom: 2px solid var(--orange) !important;
+    padding-bottom: 5px;   /* Espace entre le texte et le trait orange */
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+/* Structure pour placer le pictogramme à droite */
+.question-flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 .pictogram-img {
     display: block;
     width: 60px !important; /* Force la largeur à 60 pixels */
@@ -72,7 +139,7 @@ body { font-family: Arial, sans-serif; background: #ccc; padding: 20px; }
 }
 
 .signature-table th {
-    background-color: #7a1212; /* Bordeaux Alyzia */
+    background-color: #EF7D00; /* orange Alyzia */
     color: white;
     border: 1px solid #000;
     padding: 8px;
@@ -81,10 +148,10 @@ body { font-family: Arial, sans-serif; background: #ccc; padding: 20px; }
 }
 
 .sig-zone {
-    height: 100px;
     border: 1px solid #000;
+    height: 60px !important; /* Réduit de moitié pour gagner de l'espace */
     vertical-align: top;
-    width: 50%;
+    padding: 0;
 }
 
 .sig-zone textarea {
@@ -98,29 +165,23 @@ body { font-family: Arial, sans-serif; background: #ccc; padding: 20px; }
 /* Style Bas de page - Photo 3 */
 .legal-notice-box {
     display: flex;
-    border: 1px solid #000;
-    margin-top: 20px;
-    font-family: Arial, sans-serif;
+    border: 2px solid #000;
+    margin-top: 5px !important; /* Espace réduit avec le bloc du dessus */
 }
 
 .legal-text {
     width: 75%;
-    padding: 8px;
-    font-size: 0.75rem;
-    line-height: 1.3;
+    padding: 4px; /* Padding réduit */
+    font-size: 0.6rem !important; /* Texte plus petit */
+    line-height: 1.1;
     border-right: 1px solid #000;
-    font-style: italic;
 }
 
 .legal-info {
     width: 25%;
-    padding: 8px;
-    font-size: 0.85rem;
-    text-align: right;
-    font-weight: bold;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    padding: 4px;
+    font-size: 0.65rem !important; /* Texte plus petit */
+    line-height: 1.1;
 }
 
 /* Suppression des boutons à l'impression/PDF */
@@ -164,12 +225,9 @@ body { font-family: Arial, sans-serif; background: #ccc; padding: 20px; }
 .sig-content {
     width: 100%;
     height: 100%;
-    padding: 10px;
-    box-sizing: border-box;
-    font-family: Courier, monospace; /* Style machine à écrire pour le texte saisi */
-    font-size: 1rem;
-    outline: none;
-    overflow-wrap: break-word;
+    padding: 5px; /* Réduit pour compacter le texte */
+    font-size: 0.9rem;
+    line-height: 1.1;
 }
 
 /* Bordures Mentions Légales */
@@ -285,5 +343,57 @@ body { font-family: Arial, sans-serif; background: #ccc; padding: 20px; }
         transform: scale(0.78);
         transform-origin: top left;
         width: 130%;
+    }
+}
+
+/* Forcer majuscules et gras pour TOUS les champs de saisie */
+input[type="text"], 
+input[type="date"], 
+.sig-content {
+    font-weight: bold !important;
+    text-transform: uppercase !important; /* Force les majuscules visuellement */
+    text-align: center !important;       /* Centre le texte saisi */
+}
+
+/* Spécifique pour l'alignement de la date dans son champ */
+input[type="date"] {
+    display: flex;
+    justify-content: center;
+}
+.options-box {
+    width: 70%;
+}
+.image-box {
+    width: 25%;
+    text-align: right;
+}
+
+.pictogram-img-right {
+    width: 60px !important;
+    height: auto;
+    border: 1px solid #ccc;
+    display: inline-block;
+}
+
+/* Ajustement pour le PDF */
+@media print {
+    .question-card {
+        border: 1px solid #000 !important;
+        margin-bottom: 5px !important;
+    }
+}
+/* Ajustement spécifique pour le PDF pour conserver le trait orange */
+@media print {
+    .question-card {
+        border: none !important;
+        border-bottom: 2px solid var(--orange) !important;
+        margin-bottom: 10px !important;
+    }
+}
+/* Ajustement pour le PDF */
+@media print {
+    .question-card p {
+        border-bottom: 2px solid var(--orange) !important;
+        -webkit-print-color-adjust: exact;
     }
 }

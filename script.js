@@ -10,22 +10,77 @@ function showAlert(message) {
     }
 }
 
+
 function calculerScore() {
-    // 1. VÉRIFICATION DE LA DATE
+// Liste des champs à transformer en majuscules automatiquement
+    const fieldsToUppercase = [
+        'nom-agent', 'prenom-agent', 
+        'nom-eval', 'prenom-eval', 'fonction-eval', 
+        'lieu-eval'
+    ];
+
+    fieldsToUppercase.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = el.value.toUpperCase(); // Convertit la saisie en majuscules
+    });
+    // --- 1. VÉRIFICATION DES INFOS GÉNÉRALES ---
     const inputDate = document.getElementById('date-eval');
+    const inputLieu = document.getElementById('lieu-eval');
+    
     if (!inputDate || inputDate.value === "") {
-        showAlert("Action bloquée : La Date de l'évaluation doit être renseignée.");
+        showAlert("Action bloquée : La Date de l'évaluation est obligatoire.");
+        return; 
+    }
+    if (!inputLieu || inputLieu.value.trim() === "") {
+        showAlert("Action bloquée : Le Lieu d'évaluation est obligatoire.");
         return; 
     }
 
-    // 2. VÉRIFICATION DE L'ÉVALUATEUR
-    const inputEval = document.getElementById('nom-eval');
-    if (!inputEval || inputEval.value.trim() === "") {
-        showAlert("Action bloquée : Le Nom de l'évaluateur doit être renseigné.");
-        return; 
+    // --- 2. VÉRIFICATION AGENT ÉVALUÉ ---
+    const nomAgent = document.getElementById('nom-agent');
+    const prenomAgent = document.getElementById('prenom-agent'); // Ajout bloquant [cite: 70, 71, 72]
+
+    if (!nomAgent || nomAgent.value.trim() === "") {
+        showAlert("Action bloquée : Le Nom de l'agent est obligatoire.");
+        return;
+    }
+    if (!prenomAgent || prenomAgent.value.trim() === "") {
+        showAlert("Action bloquée : Le Prénom de l'agent est obligatoire.");
+        return;
     }
 
-    // 3. VÉRIFICATION DES RÉPONSES
+    // --- 3. VÉRIFICATION ÉVALUATEUR ---
+    const nomEval = document.getElementById('nom-eval');
+    const prenomEval = document.getElementById('prenom-eval'); // Ajout bloquant [cite: 73, 74, 75]
+    const fonctionEval = document.getElementById('fonction-eval'); // Ajout bloquant [cite: 73, 76]
+
+    if (!nomEval || nomEval.value.trim() === "") {
+        showAlert("Action bloquée : Le Nom de l'évaluateur est obligatoire.");
+        return;
+    }
+    if (!prenomEval || prenomEval.value.trim() === "") {
+        showAlert("Action bloquée : Le Prénom de l'évaluateur est obligatoire.");
+        return;
+    }
+    if (!fonctionEval || fonctionEval.value.trim() === "") {
+        showAlert("Action bloquée : La Fonction de l'évaluateur est obligatoire.");
+        return;
+    }
+
+    // --- 4. VÉRIFICATION SIGNATURES (Commentaire/Signature) ---
+    const sigEval = document.getElementById('sig-eval'); // [cite: 129, 130]
+    const sigStagiaire = document.getElementById('sig-stagiaire'); // [cite: 129, 131]
+
+    if (!sigEval || sigEval.innerText.trim() === "") {
+        showAlert("Action bloquée : La signature/commentaire de l'évaluateur est obligatoire.");
+        return;
+    }
+    if (!sigStagiaire || sigStagiaire.innerText.trim() === "") {
+        showAlert("Action bloquée : La signature du stagiaire est obligatoire.");
+        return;
+    }
+
+    // --- 5. VÉRIFICATION DES RÉPONSES ---
     const questions = ['q1', 'q2', 'q3', 'q4', 'q5'];
     let toutesRepondues = true;
     questions.forEach(q => {
@@ -34,7 +89,7 @@ function calculerScore() {
     });
 
     if (!toutesRepondues) {
-        showAlert("Action bloquée : Vous devez répondre à toutes les questions avant de valider.");
+        showAlert("Action bloquée : Vous devez répondre à toutes les questions.");
         return;
     }
 
@@ -154,17 +209,18 @@ function genererPDF() {
     const nomAgent = document.getElementById('nom-agent');
     const nom = (nomAgent && nomAgent.value) ? nomAgent.value : "Agent";
 
-    const opt = {
-        margin: 5,
-        filename: `EVAL_DGR_${nom}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-            scale: 2,
-            useCORS: true,
-            scrollY: 0
-        },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
+const opt = {
+    margin: 5,
+    filename: `EVAL_DGR_${nom}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { 
+        scale: 2, 
+        useCORS: true,
+        scrollY: 0,
+        windowWidth: 850 // Fixe la largeur pour éviter les étirements 
+    },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+};
 
     html2pdf().set(opt).from(element).save().then(() => {
         if (btnArea) btnArea.style.display = 'block';
