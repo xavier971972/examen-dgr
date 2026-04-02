@@ -215,3 +215,53 @@ body { font-family: Arial, sans-serif; background: #ccc; padding: 20px; }
     /* Mentions légales en tout petit en bas */
     .legal-notice-box { margin-top: 5px !important; font-size: 0.6rem !important; }
 }
+/* Styles appliqués uniquement lors de la génération du PDF */
+@media print {
+    /* Cache les boutons s'ils ne sont pas déjà masqués par le JS  */
+    .btn-area, .no-print {
+        display: none !important;
+    }
+
+    .container {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 5mm !important;
+        border: 1px solid #000 !important;
+    }
+
+    /* Compression des espaces pour tout faire tenir [cite: 181, 190] */
+    .form-block, .result-container, .info-block {
+        margin-bottom: 2mm !important;
+    }
+
+    .question-card {
+        margin-bottom: 1mm !important;
+        padding: 2mm !important;
+    }
+
+    .question-card p {
+        font-size: 0.85rem !important;
+        margin-bottom: 1mm !important;
+    }
+
+    .question-card label {
+        font-size: 0.8rem !important;
+        margin: 0 !important;
+    }
+
+    .pictogram-img {
+        width: 35px !important;
+        margin: 1mm 0 !important;
+    }
+
+    /* Réduction drastique de la hauteur des signatures pour gagner de la place [cite: 61] */
+    .sig-zone {
+        height: 60px !important;
+    }
+
+    .legal-notice-box {
+        margin-top: 2mm !important;
+        font-size: 0.6rem !important;
+    }
+}
