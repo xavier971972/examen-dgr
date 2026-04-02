@@ -202,28 +202,55 @@ body {
 .envoyer { background: #28a745; }
 
 /* --- CONFIGURATION FINALE IMPRESSION / PDF --- */
+/* --- CONFIGURATION FINALE IMPRESSION / PDF --- */
 @page {
     size: A4;
-    margin: 5mm;
+    margin: 0; /* On gère les marges dans le container pour éviter les coupures */
 }
 
 @media print {
-    .no-print, .btn-area { display: none !important; }
-
-    body { background: white !important; padding: 0 !important; margin: 0 !important; }
-
-    .container {
-        width: 195mm !important;
-        max-width: 195mm !important;
-        margin: 0 auto !important;
-        padding: 2mm !important;
-        border: 1px solid #000 !important;
-        box-shadow: none !important;
+    /* Masquer les éléments interactifs */
+    .no-print, .btn-area {
+        display: none !important;
     }
 
-    .question-card, .signature-table, .legal-notice-box, .form-block {
+    body {
+        background: white !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        -webkit-print-color-adjust: exact;
+    }
+
+    /* Verrouillage de la largeur pour éviter les textes tronqués */
+    .container {
+        width: 210mm !important; /* Largeur A4 totale */
+        max-width: 210mm !important;
+        margin: 0 !important;
+        padding: 8mm !important; /* Marges internes de sécurité */
+        border: none !important; /* On retire la bordure extérieure pour gagner de la place */
+        box-sizing: border-box !important;
+        transform: none !important;
+    }
+
+    /* Compression verticale pour tenir sur une seule page */
+    .main-header { margin-bottom: 2mm !important; }
+    .form-block, .result-container, .info-block { margin-bottom: 1.5mm !important; }
+    
+    .q-title { margin: 5mm 0 2mm 0 !important; }
+    .question-card { margin-bottom: 1mm !important; padding: 1mm 0 !important; }
+    .question-card p { margin-bottom: 1mm !important; font-size: 10pt !important; }
+    
+    /* Réduction de la zone de signature pour remonter le bas de page */
+    .sig-zone { height: 50px !important; } 
+    
+    .legal-notice-box { 
+        margin-top: 2mm !important;
+        font-size: 7pt !important;
+    }
+
+    /* Empêcher les coupures de blocs au milieu */
+    .question-card, .signature-table, .legal-notice-box {
         page-break-inside: avoid !important;
     }
-    
-    input[type="date"]::-webkit-calendar-picker-indicator { display: none; }
 }
