@@ -135,13 +135,11 @@ const opt = {
     filename: `EVAL_DGR_${nom}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { 
-        scale: 0.65, // 🔥 AVANT = 2 → TROP GRAND
+        scale: 1, // 🔥 important (ni trop petit ni trop grand)
         useCORS: true,
-        letterRendering: true,
         scrollY: 0
     },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak: { mode: ['avoid-all', 'css'] }
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
 };
 
 function envoyerEmail() {

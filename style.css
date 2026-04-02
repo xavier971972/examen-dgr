@@ -280,3 +280,10 @@ body { font-family: Arial, sans-serif; background: #ccc; padding: 20px; }
 .legal-notice-box {
     page-break-inside: avoid;
 }
+@media print {
+    body {
+        transform: scale(0.78);
+        transform-origin: top left;
+        width: 130%;
+    }
+}
