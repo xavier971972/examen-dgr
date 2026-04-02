@@ -182,38 +182,25 @@ function genererPDF() {
     const element = document.getElementById('document-to-print');
     const btnArea = document.querySelector('.btn-area');
 
-    if (typeof html2pdf === "undefined") {
-        showAlert("Erreur : la librairie PDF n'est pas chargée.");
-        return;
-    }
-
-    // 1. Masquer les boutons pour qu'ils n'apparaissent pas dans le PDF
     if (btnArea) btnArea.style.display = 'none';
 
-    // 2. Synchronisation CRITIQUE des valeurs (Inputs vers attributs HTML)
-    // Sans cela, le moteur de rendu PDF voit des champs vides
+    // Synchronisation forcée des données saisies (Majuscules + Gras)
     const inputs = element.querySelectorAll('input, textarea');
     inputs.forEach(input => {
         if (input.type === 'checkbox' || input.type === 'radio') {
             if (input.checked) input.setAttribute('checked', 'checked');
-            else input.removeAttribute('checked');
         } else {
-            // Force la valeur actuelle dans l'attribut value du DOM
             input.setAttribute('value', input.value.toUpperCase());
         }
     });
-    
-    // Synchro pour les zones de signature (contenteditable)
+
     const sigs = element.querySelectorAll('.sig-content');
     sigs.forEach(sig => {
-        // On transfère le texte dans le contenu pour le moteur de rendu
         sig.innerHTML = sig.innerText.toUpperCase();
     });
 
-    const nomAgent = document.getElementById('nom-agent');
-    const nom = (nomAgent && nomAgent.value) ? nomAgent.value.toUpperCase() : "AGENT";
+    const nom = document.getElementById('nom-agent').value || "AGENT";
 
-    // 3. Configuration optimisée pour tenir sur une page A4
     const opt = {
         margin: 5,
         filename: `EVAL_DGR_${nom}.pdf`,
@@ -221,22 +208,15 @@ function genererPDF() {
         html2canvas: { 
             scale: 2, 
             useCORS: true, 
-            logging: false,
-            letterRendering: true,
             scrollY: 0,
-            windowWidth: element.clientWidth // Utilise la largeur réelle du conteneur
+            windowWidth: 800, // Force une largeur fixe pour éviter les coupures [cite: 243, 244]
+            letterRendering: true
         },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
-    // 4. Lancement de la génération avec gestion du retour des boutons
     html2pdf().set(opt).from(element).save().then(() => {
-        // Réafficher les boutons après la génération
         if (btnArea) btnArea.style.display = 'block';
-    }).catch(err => {
-        if (btnArea) btnArea.style.display = 'block';
-        console.error("Erreur PDF:", err);
-        showAlert("Erreur lors de la génération du PDF.");
     });
 }
 
