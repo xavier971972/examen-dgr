@@ -187,46 +187,56 @@ function genererPDF() {
         return;
     }
 
+    // 1. Masquer les boutons pour qu'ils n'apparaissent pas dans le PDF
     if (btnArea) btnArea.style.display = 'none';
 
-    // Synchronisation inputs et zones de signature
+    // 2. Synchronisation CRITIQUE des valeurs (Inputs vers attributs HTML)
+    // Sans cela, le moteur de rendu PDF voit des champs vides
     const inputs = element.querySelectorAll('input, textarea');
     inputs.forEach(input => {
         if (input.type === 'checkbox' || input.type === 'radio') {
             if (input.checked) input.setAttribute('checked', 'checked');
             else input.removeAttribute('checked');
         } else {
-            input.setAttribute('value', input.value);
+            // Force la valeur actuelle dans l'attribut value du DOM
+            input.setAttribute('value', input.value.toUpperCase());
         }
     });
     
-    // Synchro spécifique pour les signatures (contenteditable)
+    // Synchro pour les zones de signature (contenteditable)
     const sigs = element.querySelectorAll('.sig-content');
     sigs.forEach(sig => {
-        sig.setAttribute('data-value', sig.innerText);
+        // On transfère le texte dans le contenu pour le moteur de rendu
+        sig.innerHTML = sig.innerText.toUpperCase();
     });
 
     const nomAgent = document.getElementById('nom-agent');
-    const nom = (nomAgent && nomAgent.value) ? nomAgent.value : "Agent";
+    const nom = (nomAgent && nomAgent.value) ? nomAgent.value.toUpperCase() : "AGENT";
 
-const opt = {
-    margin: 5,
-    filename: `EVAL_DGR_${nom}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { 
-        scale: 2, 
-        useCORS: true,
-        scrollY: 0,
-        windowWidth: 850 // Fixe la largeur pour éviter les étirements 
-    },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-};
+    // 3. Configuration optimisée pour tenir sur une page A4
+    const opt = {
+        margin: 5,
+        filename: `EVAL_DGR_${nom}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+            scale: 2, 
+            useCORS: true, 
+            logging: false,
+            letterRendering: true,
+            scrollY: 0,
+            windowWidth: element.clientWidth // Utilise la largeur réelle du conteneur
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
 
+    // 4. Lancement de la génération avec gestion du retour des boutons
     html2pdf().set(opt).from(element).save().then(() => {
+        // Réafficher les boutons après la génération
         if (btnArea) btnArea.style.display = 'block';
     }).catch(err => {
         if (btnArea) btnArea.style.display = 'block';
         console.error("Erreur PDF:", err);
+        showAlert("Erreur lors de la génération du PDF.");
     });
 }
 
