@@ -265,3 +265,18 @@ body { font-family: Arial, sans-serif; background: #ccc; padding: 20px; }
         font-size: 0.6rem !important;
     }
 }
+@page {
+    size: A4;
+    margin: 8mm;
+}
+
+/* Evite les coupures PDF */
+.container,
+.form-block,
+.result-container,
+.info-block,
+.question-card,
+.signature-table,
+.legal-notice-box {
+    page-break-inside: avoid;
+}
