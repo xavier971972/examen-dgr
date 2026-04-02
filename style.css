@@ -161,7 +161,7 @@ body {
 
 .sig-zone {
     border: 1px solid #000;
-    height: 80px !important; /* Hauteur ajustée pour équilibre */
+    height: 38px !important; /* Hauteur ajustée pour équilibre */
     vertical-align: top;
     padding: 0;
 }
