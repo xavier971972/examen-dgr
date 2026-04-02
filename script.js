@@ -133,26 +133,43 @@ function calculerScore() {
 function genererPDF() {
     const element = document.getElementById('document-to-print');
     
-    // Options pour html2pdf
+    // On s'assure que les champs sont bien synchronisés avant la capture
+    const inputs = element.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+        if (input.type === 'checkbox' || input.type === 'radio') {
+            if (input.checked) input.setAttribute('checked', 'checked');
+        } else {
+            input.setAttribute('value', input.value);
+        }
+    });
+
+    const nom = document.getElementById('nom-agent').value || "Agent";
+
     const opt = {
-        margin: 5,
-        filename: 'CBTA.pdf',
+        margin: 5, // Marges réduites à 5mm pour gagner de l'espace
+        filename: `EVAL_DGR_${nom}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { 
-            scale: 2, 
+            scale: 1.5, // Réduction de l'échelle (ajustez entre 1.5 et 2)
             useCORS: true,
-            // On s'assure que les éléments no-print sont bien ignorés
-            ignoreElements: (el) => el.classList.contains('no-print')
+            letterRendering: true
         },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        jsPDF: { 
+            unit: 'mm', 
+            format: 'a4', 
+            orientation: 'portrait',
+            compress: true 
+        }
     };
 
-
-    // Exécution avec gestion d'erreur
-    html2pdf().set(opt).from(element).save().catch(err => {
-        console.error("Erreur PDF finale:", err);
-        showAlert("Problème de sécurité image : Essayez de rafraîchir la page ou d'utiliser Chrome.");
-    });
+    // Utilisation de la méthode html2pdf pour forcer le rendu sur une page
+    html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+        // Cette partie vérifie si une deuxième page a été créée et la supprime si elle est vide
+        const totalPages = pdf.internal.getNumberOfPages();
+        if (totalPages > 1) {
+            pdf.deletePage(totalPages);
+        }
+    }).save();
 }
 
 function envoyerEmail() {
