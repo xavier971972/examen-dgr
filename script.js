@@ -133,13 +133,12 @@ function calculerScore() {
 function genererPDF() {
     const element = document.getElementById('document-to-print');
     
-    // Synchronisation des champs avant capture [cite: 71, 74, 77]
-    const inputs = element.querySelectorAll('input, textarea, div[contenteditable]');
+    // Synchronisation des champs
+    const inputs = element.querySelectorAll('input, textarea');
     inputs.forEach(input => {
         if (input.type === 'checkbox' || input.type === 'radio') {
             if (input.checked) input.setAttribute('checked', 'checked');
-        } else if (input.hasAttribute('contenteditable')) {
-            input.setAttribute('data-value', input.innerText);
+            else input.removeAttribute('checked');
         } else {
             input.setAttribute('value', input.value);
         }
@@ -148,26 +147,19 @@ function genererPDF() {
     const nom = document.getElementById('nom-agent').value || "Agent";
 
     const opt = {
-        margin: [5, 5, 5, 5], // Marges minimales (5mm) 
+        margin: 5,
         filename: `EVAL_DGR_${nom}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { 
-            scale: 2, 
+            scale: 2, // Garde une bonne qualité
             useCORS: true,
-            logging: false,
             letterRendering: true
         },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
-    // Utilisation de html2pdf avec ajustement de la taille du conteneur
-    html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
-        // Force la suppression d'une éventuelle page 2 vide
-        var totalPages = pdf.internal.getNumberOfPages();
-        for (var i = totalPages; i > 1; i--) {
-            pdf.deletePage(i);
-        }
-    }).save();
+    // On lance la génération simple
+    html2pdf().set(opt).from(element).save();
 }
 
 function envoyerEmail() {

@@ -179,55 +179,39 @@ body { font-family: Arial, sans-serif; background: #ccc; padding: 20px; }
     margin-top: 15px;
 }
 
+
+
 @media print {
-    /* On réduit la taille globale pour le PDF */
-    body {
-        font-size: 11px; 
-    }
+    /* On réduit la taille globale */
     .container {
-        width: 100%;
-        margin: 0;
-        padding: 5px;
-        border: none; /* On peut enlever la bordure extérieure pour gagner de la place */
-    }
-    .question-card {
-        margin-bottom: 5px;
-        padding: 8px;
-    }
-    .main-header {
-        margin-bottom: 10px;
-    }
-    .signature-table {
-        margin-top: 5px;
-    }
-    /* On force les images à ne pas être trop grandes */
-    .pictogram-img {
-        width: 45px !important;
-    }
-}
-/* Optimisation pour faire tenir sur une seule page PDF */
-@media print {
-    body { padding: 0; background: white; }
-    .container { 
-        padding: 5px !important; 
-        margin: 0 !important; 
+        padding: 5px !important;
         border: 1px solid #000 !important;
     }
+
+    /* En-tête plus compact */
     .main-header { margin-bottom: 5px !important; }
-    .form-block { margin-bottom: 5px !important; }
-    .result-container, .info-block { margin-bottom: 5px !important; }
-    
-    .question-card { 
+    .title-box h1 { font-size: 1.1rem !important; }
+
+    /* Blocs info plus serrés */
+    .form-block, .result-container, .info-block { 
         margin-bottom: 3px !important; 
-        padding: 5px !important; 
     }
-    .question-card p { margin: 2px 0 !important; }
-    .question-card label { margin: 1px 0 !important; }
-    
-    .pictogram-img { width: 40px !important; margin: 2px 0 !important; }
-    
+    .input-group input { padding: 4px !important; }
+
+    /* Questionnaire très compact */
+    .q-title { margin: 5px 0 !important; font-size: 1rem !important; }
+    .question-card { 
+        margin-bottom: 2px !important; 
+        padding: 4px 8px !important; 
+    }
+    .question-card p { margin: 0 0 2px 0 !important; font-size: 0.85rem !important; }
+    .question-card label { margin: 0 !important; font-size: 0.8rem !important; }
+    .pictogram-img { width: 35px !important; margin: 2px 0 !important; }
+
+    /* Zone signature réduite */
     .signature-table { margin-top: 5px !important; }
-    .sig-zone { height: 80px !important; } /* Réduction de la zone de signature */
+    .sig-zone { height: 70px !important; } /* On réduit la hauteur des cases */
     
-    .legal-notice-box { margin-top: 5px !important; }
+    /* Mentions légales en tout petit en bas */
+    .legal-notice-box { margin-top: 5px !important; font-size: 0.6rem !important; }
 }
