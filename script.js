@@ -10,35 +10,35 @@ function showAlert(message) {
     }
 }
 
-
 function calculerScore() {
-// Liste des champs à transformer en majuscules automatiquement
+    // Liste des champs à transformer en majuscules automatiquement
     const fieldsToUppercase = [
-        'nom-agent', 'prenom-agent', 
-        'nom-eval', 'prenom-eval', 'fonction-eval', 
+        'nom-agent', 'prenom-agent',
+        'nom-eval', 'prenom-eval', 'fonction-eval',
         'lieu-eval'
     ];
 
     fieldsToUppercase.forEach(id => {
         const el = document.getElementById(id);
-        if (el) el.value = el.value.toUpperCase(); // Convertit la saisie en majuscules
+        if (el) el.value = el.value.toUpperCase();
     });
+
     // --- 1. VÉRIFICATION DES INFOS GÉNÉRALES ---
     const inputDate = document.getElementById('date-eval');
     const inputLieu = document.getElementById('lieu-eval');
-    
+
     if (!inputDate || inputDate.value === "") {
         showAlert("Action bloquée : La Date de l'évaluation est obligatoire.");
-        return; 
+        return;
     }
     if (!inputLieu || inputLieu.value.trim() === "") {
         showAlert("Action bloquée : Le Lieu d'évaluation est obligatoire.");
-        return; 
+        return;
     }
 
     // --- 2. VÉRIFICATION AGENT ÉVALUÉ ---
     const nomAgent = document.getElementById('nom-agent');
-    const prenomAgent = document.getElementById('prenom-agent'); // Ajout bloquant [cite: 70, 71, 72]
+    const prenomAgent = document.getElementById('prenom-agent');
 
     if (!nomAgent || nomAgent.value.trim() === "") {
         showAlert("Action bloquée : Le Nom de l'agent est obligatoire.");
@@ -51,8 +51,8 @@ function calculerScore() {
 
     // --- 3. VÉRIFICATION ÉVALUATEUR ---
     const nomEval = document.getElementById('nom-eval');
-    const prenomEval = document.getElementById('prenom-eval'); // Ajout bloquant [cite: 73, 74, 75]
-    const fonctionEval = document.getElementById('fonction-eval'); // Ajout bloquant [cite: 73, 76]
+    const prenomEval = document.getElementById('prenom-eval');
+    const fonctionEval = document.getElementById('fonction-eval');
 
     if (!nomEval || nomEval.value.trim() === "") {
         showAlert("Action bloquée : Le Nom de l'évaluateur est obligatoire.");
@@ -67,9 +67,9 @@ function calculerScore() {
         return;
     }
 
-    // --- 4. VÉRIFICATION SIGNATURES (Commentaire/Signature) ---
-    const sigEval = document.getElementById('sig-eval'); // [cite: 129, 130]
-    const sigStagiaire = document.getElementById('sig-stagiaire'); // [cite: 129, 131]
+    // --- 4. VÉRIFICATION SIGNATURES ---
+    const sigEval = document.getElementById('sig-eval');
+    const sigStagiaire = document.getElementById('sig-stagiaire');
 
     if (!sigEval || sigEval.innerText.trim() === "") {
         showAlert("Action bloquée : La signature/commentaire de l'évaluateur est obligatoire.");
@@ -83,9 +83,10 @@ function calculerScore() {
     // --- 5. VÉRIFICATION DES RÉPONSES ---
     const questions = ['q1', 'q2', 'q3', 'q4', 'q5'];
     let toutesRepondues = true;
+
     questions.forEach(q => {
         const res = document.querySelector(`input[name="${q}"]:checked`);
-        if (!res) { toutesRepondues = false; }
+        if (!res) toutesRepondues = false;
     });
 
     if (!toutesRepondues) {
@@ -94,7 +95,7 @@ function calculerScore() {
     }
 
     let score = 0;
-    
+
     // Nettoyage styles
     const labels = document.querySelectorAll('.question-card label');
     labels.forEach(label => {
@@ -114,15 +115,21 @@ function calculerScore() {
     const q1_REPLI = document.querySelector('input[name="q1"][value="REPLI"]');
     const resQ1 = document.getElementById('res-q1');
 
-    q1_SITADOC.parentElement.style.backgroundColor = "#d4edda";
-    q1_IATA.parentElement.style.backgroundColor = "#d4edda";
+    if (q1_SITADOC) q1_SITADOC.parentElement.style.backgroundColor = "#d4edda";
+    if (q1_IATA) q1_IATA.parentElement.style.backgroundColor = "#d4edda";
 
-    if (!q1_REPLI.checked && (q1_SITADOC.checked || q1_IATA.checked)) {
+    if (q1_REPLI && q1_SITADOC && q1_IATA && !q1_REPLI.checked && (q1_SITADOC.checked || q1_IATA.checked)) {
         score += 20;
-        if (resQ1) { resQ1.textContent = "+20 pts"; resQ1.style.color = "green"; }
+        if (resQ1) {
+            resQ1.textContent = "+20 pts";
+            resQ1.style.color = "green";
+        }
     } else {
-        if (resQ1) { resQ1.textContent = "+0 pt"; resQ1.style.color = "red"; }
-        if (q1_REPLI.checked) {
+        if (resQ1) {
+            resQ1.textContent = "+0 pt";
+            resQ1.style.color = "red";
+        }
+        if (q1_REPLI && q1_REPLI.checked) {
             q1_REPLI.parentElement.style.backgroundColor = "#f8d7da";
             q1_REPLI.parentElement.style.color = "#721c24";
         }
@@ -150,10 +157,10 @@ function calculerScore() {
             }
         });
 
-        if (userChoice.parentElement.textContent.trim().includes(solutions[qName])) {
+        if (userChoice && userChoice.parentElement.textContent.trim().includes(solutions[qName])) {
             score += 20;
             isCorrect = true;
-        } else {
+        } else if (userChoice) {
             userChoice.parentElement.style.backgroundColor = "#f8d7da";
             userChoice.parentElement.style.color = "#721c24";
         }
@@ -182,38 +189,10 @@ function genererPDF() {
     const element = document.getElementById('document-to-print');
     const btnArea = document.querySelector('.btn-area');
 
-    if (btnArea) btnArea.style.display = 'none';
-
-    // Synchronisation forcée des données saisies (Majuscules + Gras)
-    const inputs = element.querySelectorAll('input, textarea');
-    inputs.forEach(input => {
-        if (input.type === 'checkbox' || input.type === 'radio') {
-            if (input.checked) input.setAttribute('checked', 'checked');
-        } else {
-            input.setAttribute('value', input.value.toUpperCase());
-        }
-    });
-
-    const sigs = element.querySelectorAll('.sig-content');
-    sigs.forEach(sig => {
-        sig.innerHTML = sig.innerText.toUpperCase();
-    });
-
-    const nom = document.getElementById('nom-agent').value || "AGENT";
-
-    const opt = {
-        margin: 5,
-        filename: `EVAL_DGR_${nom}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-            scale: 2, 
-            useCORS: true, 
-            scrollY: 0,
-            windowWidth: 800, // Force une largeur fixe pour éviter les coupures [cite: 243, 244]
-            letterRendering: true
-function genererPDF() {
-    const element = document.getElementById('document-to-print');
-    const btnArea = document.querySelector('.btn-area');
+    if (typeof html2pdf === "undefined") {
+        showAlert("Erreur : la librairie PDF n'est pas chargée.");
+        return;
+    }
 
     if (btnArea) btnArea.style.display = 'none';
 
@@ -274,7 +253,7 @@ function envoyerEmail() {
     const nom = document.getElementById('nom-agent').value;
     const score = document.getElementById('points-result').textContent;
     const statusText = document.getElementById('status-result').innerText;
-    
+
     const sujet = encodeURIComponent(`Évaluation DGR 7.5 - ${nom}`);
     const corps = encodeURIComponent(`Agent : ${nom}\nScore : ${score}/100\nRésultat : ${statusText}`);
     window.location.href = `mailto:xavier.oliere@alyzia.com?subject=${sujet}&body=${corps}`;
