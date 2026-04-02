@@ -205,3 +205,29 @@ body { font-family: Arial, sans-serif; background: #ccc; padding: 20px; }
         width: 45px !important;
     }
 }
+/* Optimisation pour faire tenir sur une seule page PDF */
+@media print {
+    body { padding: 0; background: white; }
+    .container { 
+        padding: 5px !important; 
+        margin: 0 !important; 
+        border: 1px solid #000 !important;
+    }
+    .main-header { margin-bottom: 5px !important; }
+    .form-block { margin-bottom: 5px !important; }
+    .result-container, .info-block { margin-bottom: 5px !important; }
+    
+    .question-card { 
+        margin-bottom: 3px !important; 
+        padding: 5px !important; 
+    }
+    .question-card p { margin: 2px 0 !important; }
+    .question-card label { margin: 1px 0 !important; }
+    
+    .pictogram-img { width: 40px !important; margin: 2px 0 !important; }
+    
+    .signature-table { margin-top: 5px !important; }
+    .sig-zone { height: 80px !important; } /* Réduction de la zone de signature */
+    
+    .legal-notice-box { margin-top: 5px !important; }
+}
