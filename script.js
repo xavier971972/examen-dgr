@@ -1,4 +1,4 @@
-// Fonction pour afficher une alerte personnalisée sans mention "github.io"
+// Fonction pour afficher une alerte personnalisée
 function showAlert(message) {
     const modal = document.getElementById('custom-alert');
     const msgElem = document.getElementById('alert-message');
@@ -6,13 +6,12 @@ function showAlert(message) {
         msgElem.textContent = message;
         modal.style.display = 'flex';
     } else {
-        // Backup si la modale n'est pas encore dans le HTML
         alert(message);
     }
 }
 
 function calculerScore() {
-    // 1. VÉRIFICATION DE LA DATE (Nouveau blocage)
+    // 1. VÉRIFICATION DE LA DATE
     const inputDate = document.getElementById('date-eval');
     if (!inputDate || inputDate.value === "") {
         showAlert("Action bloquée : La Date de l'évaluation doit être renseignée.");
@@ -26,7 +25,7 @@ function calculerScore() {
         return; 
     }
 
-    // 3. VÉRIFICATION DES RÉPONSES (q1 à q5)
+    // 3. VÉRIFICATION DES RÉPONSES
     const questions = ['q1', 'q2', 'q3', 'q4', 'q5'];
     let toutesRepondues = true;
     questions.forEach(q => {
@@ -39,10 +38,9 @@ function calculerScore() {
         return;
     }
 
-    // --- SI TOUT EST OK, CALCUL DU SCORE ---
     let score = 0;
     
-    // Nettoyage des styles précédents
+    // Nettoyage styles
     const labels = document.querySelectorAll('.question-card label');
     labels.forEach(label => {
         label.style.backgroundColor = "transparent";
@@ -50,19 +48,17 @@ function calculerScore() {
         label.style.fontWeight = "normal";
     });
 
-    // Nettoyage des points affichés (+20 / +0)
     for (let i = 1; i <= 5; i++) {
         const span = document.getElementById(`res-q${i}`);
         if (span) span.textContent = "";
     }
 
-    // --- LOGIQUE QUESTION 1 ---
+    // Logique Q1
     const q1_SITADOC = document.querySelector('input[name="q1"][value="SITADOC"]');
     const q1_IATA = document.querySelector('input[name="q1"][value="IATA"]');
     const q1_REPLI = document.querySelector('input[name="q1"][value="REPLI"]');
     const resQ1 = document.getElementById('res-q1');
 
-    // On montre les bonnes réponses en vert [cite: 150, 151]
     q1_SITADOC.parentElement.style.backgroundColor = "#d4edda";
     q1_IATA.parentElement.style.backgroundColor = "#d4edda";
 
@@ -77,7 +73,7 @@ function calculerScore() {
         }
     }
 
-    // --- LOGIQUE QUESTIONS 2 À 5 ---
+    // Logique Q2-Q5
     const solutions = {
         q2: "Toxique",
         q3: "Une cigarette électronique",
@@ -92,7 +88,6 @@ function calculerScore() {
         const resSpan = document.getElementById(`res-q${i}`);
         let isCorrect = false;
 
-        // Colorer la bonne réponse en vert [cite: 58]
         radios.forEach(r => {
             if (r.parentElement.textContent.trim().includes(solutions[qName])) {
                 r.parentElement.style.backgroundColor = "#d4edda";
@@ -100,7 +95,6 @@ function calculerScore() {
             }
         });
 
-        // Colorer l'erreur en rouge si le choix utilisateur est incorrect
         if (userChoice.parentElement.textContent.trim().includes(solutions[qName])) {
             score += 20;
             isCorrect = true;
@@ -115,17 +109,16 @@ function calculerScore() {
         }
     }
 
-    // --- AFFICHAGE TOTAL ---
     const pct = (score / 100) * 100;
     document.getElementById('points-result').textContent = score;
     document.getElementById('percent-result').textContent = pct;
 
     const status = document.getElementById('status-result');
     if (pct >= 80) {
-        status.innerHTML = "<strong>✅ L'évaluation a été validée.</strong>"; // [cite: 144]
+        status.innerHTML = "<strong>✅ L'évaluation a été validée.</strong>";
         status.style.color = "green";
     } else {
-        status.innerHTML = "<strong>❌ L'évaluation n'a pas été validée.</strong>"; // 
+        status.innerHTML = "<strong>❌ L'évaluation n'a pas été validée.</strong>";
         status.style.color = "red";
     }
 }
@@ -134,37 +127,14 @@ function genererPDF() {
     const element = document.getElementById('document-to-print');
     const btnArea = document.querySelector('.btn-area');
 
-    // Masquer boutons
-    if (btnArea) btnArea.style.display = 'none';
-
-    // Synchronisation inputs
-    const inputs = element.querySelectorAll('input, textarea');
-    inputs.forEach(input => {
-        if (input.type === 'checkbox' || input.type === 'radio') {
-            if (input.checked) input.setAttribute('checked', 'checked');
-            else input.removeAttribute('checked');
-        } else {
-            input.setAttribute('value', input.value);
-        }
-    });
-
-    const nom = document.getElementById('nom-agent').value || "Agent";
-
-function genererPDF() {
-    const element = document.getElementById('document-to-print');
-    const btnArea = document.querySelector('.btn-area');
-
-    // Sécurité : vérifier html2pdf
     if (typeof html2pdf === "undefined") {
         showAlert("Erreur : la librairie PDF n'est pas chargée.");
-        console.error("html2pdf non chargé");
         return;
     }
 
-    // Masquer boutons
     if (btnArea) btnArea.style.display = 'none';
 
-    // Synchronisation inputs
+    // Synchronisation inputs et zones de signature
     const inputs = element.querySelectorAll('input, textarea');
     inputs.forEach(input => {
         if (input.type === 'checkbox' || input.type === 'radio') {
@@ -174,16 +144,22 @@ function genererPDF() {
             input.setAttribute('value', input.value);
         }
     });
+    
+    // Synchro spécifique pour les signatures (contenteditable)
+    const sigs = element.querySelectorAll('.sig-content');
+    sigs.forEach(sig => {
+        sig.setAttribute('data-value', sig.innerText);
+    });
 
-    const nomInput = document.getElementById('nom-agent');
-    const nom = nomInput && nomInput.value ? nomInput.value : "Agent";
+    const nomAgent = document.getElementById('nom-agent');
+    const nom = (nomAgent && nomAgent.value) ? nomAgent.value : "Agent";
 
     const opt = {
         margin: 5,
         filename: `EVAL_DGR_${nom}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { 
-            scale: 1,
+            scale: 2,
             useCORS: true,
             scrollY: 0
         },
@@ -195,7 +171,6 @@ function genererPDF() {
     }).catch(err => {
         if (btnArea) btnArea.style.display = 'block';
         console.error("Erreur PDF:", err);
-        showAlert("Erreur lors de la génération du PDF.");
     });
 }
 
