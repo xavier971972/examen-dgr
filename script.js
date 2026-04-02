@@ -150,6 +150,34 @@ function genererPDF() {
 
     const nom = document.getElementById('nom-agent').value || "Agent";
 
+function genererPDF() {
+    const element = document.getElementById('document-to-print');
+    const btnArea = document.querySelector('.btn-area');
+
+    // Sécurité : vérifier html2pdf
+    if (typeof html2pdf === "undefined") {
+        showAlert("Erreur : la librairie PDF n'est pas chargée.");
+        console.error("html2pdf non chargé");
+        return;
+    }
+
+    // Masquer boutons
+    if (btnArea) btnArea.style.display = 'none';
+
+    // Synchronisation inputs
+    const inputs = element.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+        if (input.type === 'checkbox' || input.type === 'radio') {
+            if (input.checked) input.setAttribute('checked', 'checked');
+            else input.removeAttribute('checked');
+        } else {
+            input.setAttribute('value', input.value);
+        }
+    });
+
+    const nomInput = document.getElementById('nom-agent');
+    const nom = nomInput && nomInput.value ? nomInput.value : "Agent";
+
     const opt = {
         margin: 5,
         filename: `EVAL_DGR_${nom}.pdf`,
@@ -167,6 +195,7 @@ function genererPDF() {
     }).catch(err => {
         if (btnArea) btnArea.style.display = 'block';
         console.error("Erreur PDF:", err);
+        showAlert("Erreur lors de la génération du PDF.");
     });
 }
 
